@@ -26,7 +26,7 @@ TOKEN = os.getenv("DISCORD_TOKEN", "").strip()
 WELCOME_TITLE = os.getenv("WELCOME_TITLE", "입장 안내")
 WELCOME_MESSAGE = os.getenv(
     "WELCOME_MESSAGE",
-    "아래 버튼을 눌러 서버별명을 (동아리명/이름) 형식으로 설정해주세요.",
+    "본인 소속 버튼을 누른 뒤 이름만 입력해주세요.",
 )
 
 intents = discord.Intents.default()
@@ -464,11 +464,11 @@ async def send_welcome_prompt(guild: discord.Guild) -> bool:
         title=WELCOME_TITLE,
         description=(
             f"{WELCOME_MESSAGE}\n\n"
-            "호남지역 대학/동아리 버튼 중 본인 소속을 선택해주세요."
+            "버튼을 누르면 이름 입력창이 열립니다."
         ),
         color=discord.Color.blurple(),
     )
-    embed.set_footer(text="/별명설정 명령어로도 설정할 수 있어요.")
+    embed.set_footer(text="이름만 입력하면 서버별명과 역할이 자동으로 설정됩니다.")
 
     try:
         await channel.send(embed=embed, view=HonamClubView())
