@@ -512,12 +512,21 @@ async def on_ready() -> None:
 
     logger.info("Logged in as %s (%s)", bot.user, bot.user.id if bot.user else "unknown")
 
-    await bot.tree.sync()
-    logger.info("Synced global slash commands")
+    if bot.application_id is not None:
+        await bot.http.bulk_upsert_global_commands(bot.application_id, payload=[])
+        logger.info("Cleared global slash commands")
+
     for guild in bot.guilds:
         bot.tree.copy_global_to(guild=guild)
         await bot.tree.sync(guild=guild)
         logger.info("Synced slash commands to guild %s", guild.id)
+
+
+@bot.event
+async def on_guild_join(guild: discord.Guild) -> None:
+    bot.tree.copy_global_to(guild=guild)
+    await bot.tree.sync(guild=guild)
+    logger.info("Synced slash commands to new guild %s", guild.id)
 
 
 @bot.event
