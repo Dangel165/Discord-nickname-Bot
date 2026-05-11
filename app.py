@@ -514,6 +514,10 @@ async def on_ready() -> None:
 
     await bot.tree.sync()
     logger.info("Synced global slash commands")
+    for guild in bot.guilds:
+        bot.tree.copy_global_to(guild=guild)
+        await bot.tree.sync(guild=guild)
+        logger.info("Synced slash commands to guild %s", guild.id)
 
 
 @bot.event
